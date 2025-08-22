@@ -1,0 +1,17 @@
+# Este projeto não requer bibliotecas externas
+# Todas as funcionalidades são implementadas usando bibliotecas padrão do Python
+
+# Python 3.6+ é necessário para:
+# - f-strings (Python 3.6+)
+# - Type hints avançados
+# - Bibliotecas padrão utilizadas
+
+# Bibliotecas padrão utilizadas:
+# - socket: Programação de sockets UDP
+# - struct: Empacotamento/desempacotamento de dados binários
+# - hashlib: Cálculo de checksums MD5
+# - os: Operações de sistema de arquivos
+# - time: Controle de tempo e delays
+# - threading: Processamento multithread
+# - logging: Sistema de logging
+# - argparse: Parsing de argumentos de linha de comando
