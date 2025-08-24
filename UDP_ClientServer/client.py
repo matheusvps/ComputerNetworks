@@ -12,6 +12,7 @@ import time
 import threading
 from typing import Dict, List, Tuple, Optional
 import logging
+import sys
 
 # Configuração de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -70,7 +71,7 @@ class UDPClient:
             # Aguarda informações do arquivo
             file_info = self.receive_file_info()
             if not file_info:
-                logger.error("Não foi possível obter informações do arquivo")
+                logger.error("Não foi possível obter informações do arquivo - servidor pode não estar rodando")
                 return False
             
             # Inicializa estado da transferência
@@ -112,8 +113,15 @@ class UDPClient:
     def receive_file_info(self) -> Optional[Dict]:
         """Recebe informações do arquivo do servidor"""
         try:
+            # Reduz o timeout para detectar servidor não disponível mais rapidamente
+            original_timeout = self.socket.gettimeout()
+            self.socket.settimeout(3.0)  # 3 segundos para detectar servidor não disponível
+            
             data, _ = self.socket.recvfrom(4096)
             message = data.decode('utf-8')
+            
+            # Restaura timeout original
+            self.socket.settimeout(original_timeout)
             
             if message.startswith('FILE_INFO '):
                 parts = message.split(' ')
@@ -129,10 +137,16 @@ class UDPClient:
                 return None
                 
         except socket.timeout:
-            logger.error("Timeout ao aguardar informações do arquivo")
+            logger.error("Timeout ao aguardar informações do arquivo - servidor não está respondendo")
         except Exception as e:
             logger.error(f"Erro ao receber informações do arquivo: {e}")
         
+        # Restaura timeout original em caso de erro
+        try:
+            self.socket.settimeout(original_timeout)
+        except:
+            pass
+            
         return None
     
     def receive_file_segments(self):
@@ -330,13 +344,14 @@ def main():
     # Verifica se a porta é válida
     if args.server_port <= 1024:
         print("Erro: Porta deve ser maior que 1024")
-        return
+        sys.exit(1)
     
     client = UDPClient(args.server_host, args.server_port, args.timeout)
     
     try:
         if not client.connect():
-            return
+            print("Erro: Falha ao conectar ao servidor")
+            sys.exit(1)
         
         if args.simulate_loss:
             client.enable_loss_simulation(args.loss_probability)
@@ -345,11 +360,17 @@ def main():
         
         if success:
             print(f"Arquivo {args.filename} recebido com sucesso!")
+            sys.exit(0)
         else:
             print(f"Falha ao receber arquivo {args.filename}")
+            sys.exit(1)
             
     except KeyboardInterrupt:
         print("\nOperação cancelada pelo usuário")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+        sys.exit(1)
     finally:
         client.disconnect()
 
