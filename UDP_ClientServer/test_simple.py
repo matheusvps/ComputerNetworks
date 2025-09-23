@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Script de Teste Simples para o Sistema UDP
-Testa funcionalidades básicas sem executar demonstrações completas
-"""
 
 import os
 import sys
@@ -10,7 +6,6 @@ import subprocess
 import time
 
 def test_imports():
-    """Testa se todos os módulos podem ser importados"""
     print("Testando imports...")
     
     try:
@@ -29,7 +24,6 @@ def test_imports():
         return False
 
 def test_file_creation():
-    """Testa criação de arquivo de teste"""
     print("\nTestando criação de arquivo de teste...")
     
     try:
@@ -44,7 +38,6 @@ def test_file_creation():
                 size = os.path.getsize("test_simple.txt")
                 print(f"✓ Arquivo de teste criado: {size} bytes")
                 
-                # Limpa arquivo de teste
                 os.remove("test_simple.txt")
                 print("✓ Arquivo de teste removido")
                 return True
@@ -63,24 +56,19 @@ def test_file_creation():
         return False
 
 def test_hello_world():
-    """Testa exemplo Hello World UDP"""
     print("\nTestando exemplo Hello World UDP...")
     
     try:
-        # Inicia servidor em background
         server_process = subprocess.Popen([
             "python3", "hello_world_udp.py", "server"
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
-        # Aguarda servidor inicializar
         time.sleep(2)
         
-        # Testa cliente
         result = subprocess.run([
             "python3", "hello_world_udp.py", "client"
         ], capture_output=True, text=True, timeout=10)
         
-        # Para servidor
         server_process.terminate()
         server_process.wait()
         
@@ -96,11 +84,9 @@ def test_hello_world():
         return False
 
 def test_server_client():
-    """Testa servidor e cliente básicos"""
     print("\nTestando servidor e cliente básicos...")
     
     try:
-        # Cria arquivo pequeno para teste
         result = subprocess.run([
             "python3", "create_test_file.py", 
             "--filename", "test_server.txt", 
@@ -117,24 +103,19 @@ def test_server_client():
         
         print(f"✓ Arquivo de teste criado: {os.path.getsize('test_server.txt')} bytes")
         
-        # Inicia servidor em background
         server_process = subprocess.Popen([
             "python3", "server.py", "--port", "8890"
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
-        # Aguarda servidor inicializar
         time.sleep(3)
         
-        # Testa cliente
         result = subprocess.run([
             "python3", "client.py", "127.0.0.1", "8890", "test_server.txt"
         ], capture_output=True, text=True, timeout=30)
         
-        # Para servidor
         server_process.terminate()
         server_process.wait()
         
-        # Verifica se arquivo foi baixado
         if os.path.exists("test_server.txt"):
             original_size = os.path.getsize("test_server.txt")
             os.remove("test_server.txt")
@@ -154,7 +135,6 @@ def test_server_client():
         return False
 
 def main():
-    """Função principal de teste"""
     print("TESTE SIMPLES DO SISTEMA UDP")
     print("="*40)
     

@@ -1,46 +1,32 @@
 #!/usr/bin/env python3
-"""
-Arquivo de Configuração Centralizada para o Sistema UDP
-Define constantes e configurações utilizadas por todos os componentes
-"""
 
-# Configurações de Rede
-DEFAULT_HOST = '0.0.0.0'  # Host padrão para o servidor
-DEFAULT_PORT = 8888        # Porta padrão para o servidor
-DEFAULT_TIMEOUT = 5.0      # Timeout padrão em segundos
+DEFAULT_HOST = '0.0.0.0'
+DEFAULT_PORT = 8888
+DEFAULT_TIMEOUT = 5.0
 
-# Configurações do Protocolo
-MAX_PAYLOAD_SIZE = 1024    # Tamanho máximo do payload por segmento (bytes)
-HEADER_SIZE = 20           # Tamanho do cabeçalho em bytes
-MAX_FILENAME_LENGTH = 255  # Tamanho máximo do nome do arquivo
+MAX_PAYLOAD_SIZE = 1024
+HEADER_SIZE = 20
+MAX_FILENAME_LENGTH = 255
 
-# Configurações de Performance
-SEGMENT_DELAY = 0.01      # Delay entre segmentos (segundos)
-MAX_RETRANSMISSION_WAIT = 10.0  # Tempo máximo para aguardar retransmissão
-BUFFER_SIZE = 4096         # Tamanho do buffer de recepção
+SEGMENT_DELAY = 0.01
+MAX_RETRANSMISSION_WAIT = 10.0
+BUFFER_SIZE = 4096
 
-# Configurações de Simulação de Perda
-DEFAULT_LOSS_PROBABILITY = 0.1  # Probabilidade padrão de perda (10%)
+DEFAULT_LOSS_PROBABILITY = 0.1
 
-# Configurações de Logging
-LOG_LEVEL = 'INFO'         # Nível de logging padrão
+LOG_LEVEL = 'INFO'
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-# Configurações de Arquivo
-DEFAULT_OUTPUT_DIR = '.'   # Diretório de saída padrão
-MAX_FILE_SIZE = 1024 * 1024 * 100  # Tamanho máximo de arquivo (100MB)
+DEFAULT_OUTPUT_DIR = '.'
+MAX_FILE_SIZE = 1024 * 1024 * 100
 
-# Configurações de Segurança
-ENABLE_CHECKSUM = True     # Habilita verificação de checksum
-CHECKSUM_ALGORITHM = 'md5' # Algoritmo de checksum a ser usado
+ENABLE_CHECKSUM = True
+CHECKSUM_ALGORITHM = 'md5'
 
-# Configurações de Debug
-DEBUG_MODE = False         # Modo debug (mais logs detalhados)
-VERBOSE_OUTPUT = False     # Saída verbosa para demonstrações
+DEBUG_MODE = False
+VERBOSE_OUTPUT = False
 
-# Validações
 def validate_config():
-    """Valida as configurações do sistema"""
     errors = []
     
     if DEFAULT_PORT <= 1024:
@@ -64,7 +50,6 @@ def validate_config():
     return errors
 
 def get_config_summary():
-    """Retorna um resumo das configurações"""
     return {
         'network': {
             'default_host': DEFAULT_HOST,
@@ -91,7 +76,6 @@ def get_config_summary():
     }
 
 if __name__ == "__main__":
-    # Valida configurações
     errors = validate_config()
     
     if errors:
@@ -100,7 +84,6 @@ if __name__ == "__main__":
             print(f"  - {error}")
         exit(1)
     
-    # Mostra resumo das configurações
     print("Configurações do Sistema UDP:")
     print("="*40)
     

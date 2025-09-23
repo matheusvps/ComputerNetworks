@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Exemplo Simples de Hello World UDP
-Demonstra o uso básico de sockets UDP para familiarização com a API
-"""
 
 import socket
 import threading
@@ -16,7 +12,6 @@ class HelloWorldUDPServer:
         self.running = False
     
     def start(self):
-        """Inicia o servidor Hello World"""
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.socket.bind((self.host, self.port))
@@ -32,7 +27,6 @@ class HelloWorldUDPServer:
                     
                     print(f"Mensagem recebida de {client_address}: {message}")
                     
-                    # Responde com Hello World
                     response = f"Hello World! Você disse: {message}"
                     self.socket.sendto(response.encode('utf-8'), client_address)
                     
@@ -44,7 +38,6 @@ class HelloWorldUDPServer:
             print(f"Erro ao iniciar servidor: {e}")
     
     def stop(self):
-        """Para o servidor"""
         self.running = False
         if self.socket:
             self.socket.close()
@@ -57,7 +50,6 @@ class HelloWorldUDPClient:
         self.socket = None
     
     def connect(self):
-        """Conecta ao servidor"""
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             print(f"Cliente conectado ao servidor {self.server_host}:{self.server_port}")
@@ -67,16 +59,13 @@ class HelloWorldUDPClient:
             return False
     
     def send_message(self, message):
-        """Envia uma mensagem para o servidor"""
         try:
             if not self.socket:
                 print("Cliente não conectado")
                 return None
             
-            # Envia mensagem
             self.socket.sendto(message.encode('utf-8'), (self.server_host, self.server_port))
             
-            # Aguarda resposta
             self.socket.settimeout(5.0)
             data, _ = self.socket.recvfrom(1024)
             response = data.decode('utf-8')
@@ -91,13 +80,11 @@ class HelloWorldUDPClient:
             return None
     
     def disconnect(self):
-        """Desconecta do servidor"""
         if self.socket:
             self.socket.close()
         print("Cliente desconectado")
 
 def run_server():
-    """Executa o servidor"""
     server = HelloWorldUDPServer()
     try:
         server.start()
@@ -106,14 +93,12 @@ def run_server():
         server.stop()
 
 def run_client():
-    """Executa o cliente"""
     client = HelloWorldUDPClient()
     
     if not client.connect():
         return
     
     try:
-        # Envia algumas mensagens de teste
         messages = ["Olá!", "Como vai?", "Teste UDP", "Fim"]
         
         for message in messages:
@@ -133,7 +118,6 @@ def run_client():
         client.disconnect()
 
 def main():
-    """Função principal"""
     import sys
     
     if len(sys.argv) < 2:

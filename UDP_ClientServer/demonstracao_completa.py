@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Script de Demonstração Completa do Sistema UDP
-Demonstra e explica todos os itens obrigatórios do projeto
-"""
 
 import os
 import time
@@ -25,42 +21,35 @@ class DemonstracaoUDP:
         ]
         
         self.arquivos_teste = [
-            ("arquivo_pequeno.txt", 0.1),      # 100KB
-            ("arquivo_medio.txt", 1),          # 1MB
-            ("arquivo_grande.txt", 10)         # 10MB
+            ("arquivo_pequeno.txt", 0.1),
+            ("arquivo_medio.txt", 1),
+            ("arquivo_grande.txt", 10)
         ]
         
     def print_header(self, titulo: str):
-        """Imprime cabeçalho formatado"""
         print(f"\n{'='*80}")
         print(f"🔧 {titulo}")
         print(f"{'='*80}")
     
     def print_step(self, passo: str):
-        """Imprime passo da demonstração"""
         print(f"\n📋 {passo}")
         print("-" * 60)
     
     def print_success(self, mensagem: str):
-        """Imprime mensagem de sucesso"""
         print(f"✅ {mensagem}")
     
     def print_error(self, mensagem: str):
-        """Imprime mensagem de erro"""
         print(f"❌ {mensagem}")
     
     def print_info(self, mensagem: str):
-        """Imprime mensagem informativa"""
         print(f"ℹ️  {mensagem}")
     
     def print_code(self, codigo: str, linguagem: str = "python"):
-        """Imprime bloco de código"""
         print(f"```{linguagem}")
         print(codigo)
         print("```")
     
     def criar_arquivos_teste(self):
-        """Cria arquivos de teste de diferentes tamanhos"""
         self.print_step("Criando arquivos de teste...")
         
         for filename, size_mb in self.arquivos_teste:
@@ -81,10 +70,8 @@ class DemonstracaoUDP:
                 self.print_error(f"Erro ao criar {filename}: {e}")
     
     def ambiente_setup(self):
-        """Demonstra o ambiente e setup do sistema"""
         self.print_header("AMBIENTE E SETUP")
         
-        # 1. Mostrar execução do Servidor UDP
         self.print_step("1.1 - Execução do Servidor UDP")
         self.print_info("O servidor UDP é implementado usando a API de sockets diretamente:")
         self.print_code("""
@@ -100,7 +87,6 @@ while self.running:
     thread.start()
 """)
         
-        # 2. Mostrar execução do Cliente UDP
         self.print_step("1.2 - Execução do Cliente UDP")
         self.print_info("O cliente também usa sockets UDP diretamente:")
         self.print_code("""
@@ -112,7 +98,6 @@ self.socket.settimeout(self.timeout)
 self.socket.sendto(request.encode('utf-8'), self.server_address)
 """)
         
-        # 3. Demonstração de especificação de endereço
         self.print_step("1.3 - Especificação de Endereço IP e Porta")
         self.print_info("O cliente especifica o endereço do servidor via linha de comando:")
         self.print_code("""
@@ -123,7 +108,6 @@ python3 client.py 127.0.0.1 8888 arquivo.txt
 self.server_address = (server_host, server_port)
 """)
         
-        # 4. Demonstração de uso direto da API de Sockets
         self.print_step("1.4 - Uso Direto da API de Sockets (Sem Bibliotecas de Abstração)")
         self.print_info("O sistema usa apenas bibliotecas padrão do Python:")
         self.print_code("""
@@ -143,7 +127,6 @@ import logging         # Sistema de logging
         self.print_success("Ambiente e Setup demonstrado com sucesso!")
     
     def protocolo_aplicacao(self):
-        """Demonstra o protocolo de aplicação e requisições"""
         self.print_header("PROTOCOLO DE APLICAÇÃO E REQUISIÇÃO")
         
         # 1. Protocolo de aplicação proposto
@@ -248,7 +231,6 @@ ERROR message                   # Mensagem de erro
         self.print_success("Protocolo de Aplicação demonstrado com sucesso!")
     
     def transferencia_segmentacao(self):
-        """Demonstra transferência e segmentação de arquivos"""
         self.print_header("TRANSFERÊNCIA E SEGMENTAÇÃO")
         
         # 1. Transferência de arquivo grande
@@ -356,7 +338,6 @@ Espaço disponível: 1500 - 20 - 8 - 20 = 1452 bytes
         self.print_success("Transferência e Segmentação demonstrada com sucesso!")
     
     def mecanismos_confiabilidade(self):
-        """Demonstra mecanismos de confiabilidade"""
         self.print_header("MECANISMOS DE CONFIABILIDADE")
         
         # 1. Ordenação com números de sequência
@@ -425,7 +406,6 @@ def reconstruct_file(self, output_dir):
         self.print_success("Mecanismos de Confiabilidade demonstrados com sucesso!")
     
     def recuperacao_erros(self):
-        """Demonstra recuperação de erros e perdas"""
         self.print_header("RECUPERAÇÃO DE ERROS/PERDAS")
         
         # 1. Simulação de perda de pacotes
@@ -547,7 +527,6 @@ def wait_for_retransmission(self, segment_number, max_wait=10.0):
         self.print_success("Recuperação de Erros demonstrada com sucesso!")
     
     def tratamento_erros(self):
-        """Demonstra tratamento de erros do servidor"""
         self.print_header("TRATAMENTO DE ERROS DO SERVIDOR")
         
         # 1. Arquivo inexistente
@@ -647,7 +626,6 @@ if message.startswith('ERROR '):
         self.print_success("Tratamento de Erros demonstrado com sucesso!")
     
     def cenarios_teste(self):
-        """Demonstra cenários de teste específicos"""
         self.print_header("CENÁRIOS DE TESTE ESPECÍFICOS")
         
         # 1. Múltiplos clientes simultâneos
@@ -789,20 +767,17 @@ if message.startswith('ERROR '):
         self.print_success("Cenários de Teste demonstrados com sucesso!")
     
     def executar_todas_demonstracoes(self):
-        """Executa todas as demonstrações em sequência"""
         print("🚀 DEMONSTRAÇÃO COMPLETA DO SISTEMA UDP")
         print("=" * 80)
         print("Este script demonstra e explica todos os itens obrigatórios do projeto")
         print("=" * 80)
         
-        # Cria arquivos de teste primeiro
         self.criar_arquivos_teste()
         
-        # Executa cada demonstração
         for titulo, funcao in self.demonstracoes:
             try:
                 funcao()
-                time.sleep(2)  # Pausa entre demonstrações
+                time.sleep(2)
             except Exception as e:
                 self.print_error(f"Erro na demonstração '{titulo}': {e}")
         
@@ -820,7 +795,6 @@ if message.startswith('ERROR '):
         print(f"\n{'='*80}")
 
 def main():
-    """Função principal"""
     demonstracao = DemonstracaoUDP()
     
     try:
