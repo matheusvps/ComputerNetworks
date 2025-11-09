@@ -166,11 +166,13 @@ class UDPClient:
                 
                 self.request_missing_segments(missing_segments)
                 
+                # Verifica novamente após retransmissão
+                final_missing = set(range(self.expected_segments)) - set(self.received_segments.keys())
                 if len(self.received_segments) == self.expected_segments:
                     logger.info("Todos os segmentos recebidos após retransmissão")
                     return True
                 else:
-                    logger.error("Arquivo incompleto")
+                    logger.error(f"Arquivo ainda incompleto após retransmissão. Segmentos ainda faltando: {sorted(final_missing)}")
                     return False
                     
         except Exception as e:
@@ -230,6 +232,9 @@ class UDPClient:
             self.request_missing_segments()
     
     def request_missing_segments(self, missing_segments: set):
+        original_simulate_loss = self.simulate_loss
+        self.simulate_loss = False
+        
         for segment_number in missing_segments:
             try:
                 request = f"RETRANSMIT {self.current_file} {segment_number}"
@@ -249,6 +254,8 @@ class UDPClient:
             except Exception as e:
                 logger.error(f"Erro ao solicitar retransmissão do segmento {segment_number}: {e}")
         
+        # Restaura a simulação de perda
+        self.simulate_loss = original_simulate_loss
         self.socket.settimeout(self.timeout)
     
     def save_file(self, output_filename: str = None) -> bool:
